@@ -9,8 +9,6 @@ var gl;
 
 var points = [];
 
-var NumTimesToSubdivide = 5;
-
 window.onload = function init()
 {
     canvas = document.getElementById( "gl-canvas" );
@@ -21,17 +19,11 @@ window.onload = function init()
     //
     //  Initialize our data for the Sierpinski Gasket
     //
+    var x = 0; //the x coordinate for the center of the hexagon
+    var y = 0; //the y coordinate for the center of the hexagon
 
-    // First, initialize the corners of our gasket with three points.
-    // TODO this is not needed
-    var vertices = [
-        vec2( -1, -1 ),
-        vec2(  0,  1 ),
-        vec2(  1, -1 )
-    ];
-    // TODO replace this function with one that computes the hexagon vertices
-    divideTriangle( vertices[0], vertices[1], vertices[2],
-                    NumTimesToSubdivide);
+    // Given the center of a hexagon calaculates all other points and draws
+    hexagon(x, y);
 
     //
     //  Configure WebGL
@@ -59,40 +51,32 @@ window.onload = function init()
     render();
 };
 
-// TODO Replace these following two functions with one new function that
 // computes the seven hexagon vertices and adds each to the points array.
-function triangle( a, b, c )
+function hexagon( x, y )
 {
-    points.push( a, b, c );
+    //distance between points, or the length of each side of the hexagon
+    var d = .5;
+    // TODO replace (1.73205081) with sqrt(3)
+    var h = (1.73205081)/2*d;
+
+    var vertices = [
+        vec2( x, y ),                 //0 or center point
+        vec2( x + d, y ),             //1
+        vec2( x + .5*d, y + h),       //2
+        vec2( x - 0.5*d, y + h),      //3
+        vec2( x - d, y ),             //4
+        vec2( x - 0.5*d, y - h),      //5
+        vec2( .5*d, y - h)            //6
+    ];
+
+    //vertice 1 is added a second time so that points 6 and 1 will be connected.
+    points.push( vertices[0], vertices[1], vertices[2], vertices[3],
+                  vertices[4], vertices[5], vertices[6] , vertices[1]);
 }
-function divideTriangle( a, b, c, count )
-{
 
-    // check for end of recursion
-
-    if ( count === 0 ) {
-        triangle( a, b, c );
-    }
-    else {
-
-        //bisect the sides
-
-        var ab = mix( a, b, 0.5 );
-        var ac = mix( a, c, 0.5 );
-        var bc = mix( b, c, 0.5 );
-
-        --count;
-
-        // three new triangles
-
-        divideTriangle( a, ab, ac, count );
-        divideTriangle( c, ac, bc, count );
-        divideTriangle( b, bc, ab, count );
-    }
-}
-// TODO Make sure we render a triangle fan instead of separate triangles
+// Renders a hexagon, which is really a triangle fan
 function render()
 {
     gl.clear( gl.COLOR_BUFFER_BIT );
-    gl.drawArrays( gl.TRIANGLES, 0, points.length );
+    gl.drawArrays( gl.TRIANGLE_FAN, 0, points.length );
 }
