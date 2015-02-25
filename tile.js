@@ -11,22 +11,26 @@ Tile.prototype.init = function(program){
     //this.colors = [];
     //thistransform = mat4();
 
-    this.makeTile(0, 0);
-
     this.program = program;
 
-    this.vBufferId = gl.createbuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBufferId);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(this.points), gl.STATIC_DRAW);
+    this.vBufferId = gl.createBuffer(); // reserve a buffer object
+    gl.bindBuffer( gl.ARRAY_BUFFER, this.vBufferId ); // set active array buffer
+    /* send vert positions to the buffer, must repeat this
+       wherever we change the vert positions for this cube */
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(this.points), gl.STATIC_DRAW );
 }
 
 Tile.prototype.draw = function(){
-    //gl.useProgram(this.program);
-    //gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, numVertices);
+    gl.bindBuffer( gl.ARRAY_BUFFER, this.vBufferId ); // set active array buffer
+    // map buffer data to the vertex shader attribute
+    var vPosId = gl.getAttribLocation( this.program, "vPosition" );
+    gl.vertexAttribPointer( vPosId, 2, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vPosId );
+
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, this.points.length );
 }
 
-Tile.prototype.numVertices = function() {return this.points.length;};
+Tile.prototype.numVertices = function() {return this.points.length;}
 
 Tile.prototype.makeTile = function(x, y) {
     //distance between points, or the length of each side of the hexagon
@@ -35,53 +39,31 @@ Tile.prototype.makeTile = function(x, y) {
     var h = Math.sqrt(3)/2*d;
 
     var vertices = [
-        vec2( x, y ),                 //0 or center point
-        vec2( x + d, y ),             //1
+        vec2( x, y ),                  //0 or center point
+        vec2( x + d, y ),              //1
         vec2( x + 0.5*d, y + h),       //2
-        vec2( x - 0.5*d, y + h),      //3
-        vec2( x - d, y ),             //4
-        vec2( x - 0.5*d, y - h),      //5
+        vec2( x - 0.5*d, y + h),       //3
+        vec2( x - d, y ),              //4
+        vec2( x - 0.5*d, y - h),       //5
         vec2( x + 0.5*d, y - h)        //6
     ];
 
     //vertice 1 is added a second time so that points 6 and 1 will be connected.
-    points.push( vertices[0], vertices[1], vertices[2], vertices[3],
+    this.points.push( vertices[0], vertices[1], vertices[2], vertices[3],
                   vertices[4], vertices[5], vertices[6] , vertices[1]);
 }
 
 window.onload = function()
 {
-    //var shaders, i;
-    var canvas = document.getElementById("gl-canvas");
+    var shaders, i;
 
-    var gl = WebGLUtils.setupWebGL(canvas);
-    if (!gl) { alert("WebGL isn't available"); }
+    initGL(); // basic WebGL setup for the scene 
 
-    //
-    //  Configure WebGL
-    //
-    gl.viewport(0, 0, canvas.width, canvas.height);
-    //           RED, GREEN, BLUE, ALPHA
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    // load and compile our shaders into a program object
+    var shaders = initShaders( gl, "vertex-shader", "fragment-shader" );
 
-    //  Load shaders and initialize attribute buffers
+    var t0 = new Tile(shaders);
 
-    var program = initShaders(gl, "vertex-shader", "fragment-shader");
-    gl.useProgram(program);
-
-    // Load the data into the GPU
-
-    var bufferId = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, bufferId);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(this.points), gl.STATIC_DRAW);
-
-    // Associate out shader variables with our data buffer
-
-    var vPosition = gl.getAttribLocation( program, "vPosition");
-    gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vPosition);
-
-    var t0 = new Tile(program);
-
-    this.draw();
+    drawables.push(t0);
+    renderScene();
 };
