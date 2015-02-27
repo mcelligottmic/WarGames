@@ -8,8 +8,9 @@ var Tile = function (program) { this.init(program); }
 
 Tile.prototype.init = function(program){
     this.points = [];
-    //this.colors = [];
-    //thistransform = mat4();
+    this.transform = mat4(); // initialize object transform as identity matrix
+
+    this.makeTile(0, 0, 0, 1);
 
     this.program = program;
 
@@ -21,36 +22,53 @@ Tile.prototype.init = function(program){
 }
 
 Tile.prototype.draw = function(){
+    gl.useProgram(this.program);
+
+    var projId = gl.getUniformLocation(this.program, "projection"); 
+    gl.uniformMatrix4fv(projId, false, flatten(projection));
+
+    var xformId = gl.getUniformLocation(this.program, "modeltransform");
+    gl.uniformMatrix4fv(xformId, false, flatten(this.transform));
+
     gl.bindBuffer( gl.ARRAY_BUFFER, this.vBufferId ); // set active array buffer
     // map buffer data to the vertex shader attribute
     var vPosId = gl.getAttribLocation( this.program, "vPosition" );
-    gl.vertexAttribPointer( vPosId, 2, gl.FLOAT, false, 0, 0 );
+    gl.vertexAttribPointer( vPosId, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vPosId );
 
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, this.points.length );
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, this.points.length);
 }
 
 Tile.prototype.numVertices = function() {return this.points.length;}
 
-Tile.prototype.makeTile = function(x, y) {
+Tile.prototype.makeTile = function(x, y, z, w) {
     //distance between points, or the length of each side of the hexagon
     var d = 0.5;
-    // TODO replace (1.73205081) with sqrt(3)
     var h = Math.sqrt(3)/2*d;
 
     var vertices = [
-        vec2( x, y ),                  //0 or center point
-        vec2( x + d, y ),              //1
-        vec2( x + 0.5*d, y + h),       //2
-        vec2( x - 0.5*d, y + h),       //3
-        vec2( x - d, y ),              //4
-        vec2( x - 0.5*d, y - h),       //5
-        vec2( x + 0.5*d, y - h)        //6
+        vec4( x, y , z, w),                  //0 or center point
+        vec4( x + d, y, z, w),              //1
+        vec4( x + 0.5*d, y + h, z, w),       //2
+        vec4( x - 0.5*d, y + h, z, w),       //3
+        vec4( x - d, y, z, w),              //4
+        vec4( x - 0.5*d, y - h, z, w),       //5
+        vec4( x + 0.5*d, y - h, z, w)        //6
     ];
 
     //vertice 1 is added a second time so that points 6 and 1 will be connected.
     this.points.push( vertices[0], vertices[1], vertices[2], vertices[3],
                   vertices[4], vertices[5], vertices[6] , vertices[1]);
+}
+
+/* Translate this cube along the specified canonical axis. */
+Tile.prototype.move = function(dist, axis){
+    var delta = [0, 0, 0];
+
+    if (axis === undefined) axis = X_AXIS;
+    delta[axis] = dist;
+
+    this.transform = mult(translate(delta), this.transform);
 }
 
 window.onload = function()
@@ -63,7 +81,12 @@ window.onload = function()
     var shaders = initShaders( gl, "vertex-shader", "fragment-shader" );
 
     var t0 = new Tile(shaders);
+    // t0.move(2);
+    var t1 = new Tile(shaders);
+    // t1.move(2);
+    var t2 = new Tile(shaders);
+    // t2.move(-2);
 
-    drawables.push(t0);
+    drawables.push(t0, t1, t2);
     renderScene();
 };

@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
 <title>War Games</title>
 
 
 <script id="vertex-shader" type="x-shader/x-vertex">
-attribute vec4 vPosition;
+//attribute is unique for each vector
+attribute vec4 vPosition; //vertex attributes
+
+//uniform means same for all vectices
+uniform mat4 projection;
+uniform mat4 modeltransform;
 
 void
 main()
 {
-    gl_Position = vPosition;
+	//math is done as such (projection*(modeltransform*vPosition));
+	//adding projection does not display hex, also cannot display other two hexagons
+	gl_Position = modeltransform * vPosition;
+    // gl_Position = projection * modeltransform * vPosition;
 }
 </script>
 
