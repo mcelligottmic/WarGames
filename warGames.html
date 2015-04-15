@@ -18,8 +18,8 @@ main()
 {
 	//math is done as such (projection*(modeltransform*vPosition));
 	//adding projection does not display hex, also cannot display other two hexagons
-	gl_Position = modeltransform * vPosition;
-    // gl_Position = projection * modeltransform * vPosition;
+	// gl_Position = modeltransform * vPosition;
+    gl_Position = projection * modeltransform * vPosition;
 }
 </script>
 

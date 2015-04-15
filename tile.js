@@ -80,12 +80,13 @@ window.onload = function()
     // load and compile our shaders into a program object
     var shaders = initShaders( gl, "vertex-shader", "fragment-shader" );
 
+    //use small move val
     var t0 = new Tile(shaders);
-    // t0.move(2);
+    // t0.move(.5);
     var t1 = new Tile(shaders);
-    // t1.move(2);
+    t1.move(1, Y_AXIS);
     var t2 = new Tile(shaders);
-    // t2.move(-2);
+    t2.move(-1, Y_AXIS);
 
     drawables.push(t0, t1, t2);
     renderScene();

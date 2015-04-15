@@ -13,7 +13,6 @@ const Z_AXIS = 2;
 var currAngle = 0;
 
 var projection;
-var camera;
 
 var drawables = []; // used to store any objects that need to be drawn
 
@@ -24,18 +23,17 @@ function initGL()
     canvas = document.getElementById( "gl-canvas" );
 
     // obtain a WebGL context bound to our canvas
-    gl = WebGLUtils.setupWebGL( canvas );
-    if ( !gl ) { alert( "WebGL isn't available" ); }
+    gl = WebGLUtils.setupWebGL( canvas);
+    if ( !gl ) { alert( "WebGL isn't available"); }
 
-    gl.viewport( 0, 0, canvas.width, canvas.height ); // use the whole canvas
-    gl.clearColor( 0.0, 0.0, 0.0, 1.0 ); // background color
+    gl.viewport( 0, 0, canvas.width, canvas.height); // use the whole canvas
+    gl.clearColor( 0.0, 0.0, 0.0, 1.0); // background color
     gl.enable(gl.DEPTH_TEST); // required for 3D hidden-surface elimination
 
     // set the projection matrix
     // note: added rotation just to better see the shapes of our cubes
-    projection = perspective(45, canvas.width/canvas.height, 0.01, 10);
-    camera = lookAt([6,2,7], [0,0,0], [0,1,0]);
-}
+    projection = ortho( -2, 2, -2, 2, -1, 1);
+ }
 
 /* Global render callback - would draw multiple objects if there were more than one */
 var renderScene = function(){
