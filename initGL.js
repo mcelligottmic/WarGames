@@ -30,9 +30,14 @@ function initGL()
     gl.clearColor( 0.0, 0.0, 0.0, 1.0); // background color
     gl.enable(gl.DEPTH_TEST); // required for 3D hidden-surface elimination
 
+    // compute aspect ratio from the canvas dimensions
+    var aspectRatio = canvas.width / canvas.height
+
     // set the projection matrix
     // note: added rotation just to better see the shapes of our cubes
-    projection = ortho( -2, 2, -2, 2, -1, 1);
+    // TODO adjust these view boundaries to look nice
+    projection = ortho( -5*aspectRatio, 5*aspectRatio,
+                        -5, 5, -1, 1);
  }
 
 /* Global render callback - would draw multiple objects if there were more than one */
