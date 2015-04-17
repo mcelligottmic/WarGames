@@ -5,11 +5,12 @@
   See https://www.opengl.org/sdk/docs/man/ for info about specific OpenGL funcs.
  */
 // TODO modify constructor to take in center coords for this tile
-var Tile = function (program) {
+var Tile = function (program, x, y) {
     this.points = [];
+
     this.transform = mat4(); // initialize object transform as identity matrix
 
-    this.makeTile(0, 0, 0, 1);
+    this.makeTile(x, y, 0, 1);
 
     this.program = program;
 
@@ -20,12 +21,14 @@ var Tile = function (program) {
     gl.bufferData( gl.ARRAY_BUFFER, flatten(this.points), gl.STATIC_DRAW );
 }
 
+//distance between two points
+Tile.DEFAULT_DISTANCE = 0.5;
 // distance between two tile centers
 Tile.DEFAULT_HEIGHT = Math.sqrt(3) / 2;
 // spacing between adjacent tiles
 Tile.BORDER_SIZE = Tile.DEFAULT_HEIGHT * 0.05;
 
-Tile.prototype.draw = function(){
+Tile.prototype.draw = function() {
     gl.useProgram(this.program);
 
     var projId = gl.getUniformLocation(this.program, "projection"); 
@@ -47,7 +50,7 @@ Tile.prototype.numVertices = function() {return this.points.length;}
 
 Tile.prototype.makeTile = function(x, y, z, w) {
     //distance between points, or the length of each side of the hexagon
-    var d = 0.5;
+    var d = Tile.DEFAULT_DISTANCE;
     var h = Tile.DEFAULT_HEIGHT * d;
 
     var vertices = [
@@ -66,7 +69,7 @@ Tile.prototype.makeTile = function(x, y, z, w) {
 }
 
 /* Translate this cube along the specified canonical axis. */
-Tile.prototype.move = function(dist, axis){
+Tile.prototype.move = function(dist, axis) {
     var delta = [0, 0, 0];
 
     if (axis === undefined) axis = X_AXIS;
@@ -74,26 +77,3 @@ Tile.prototype.move = function(dist, axis){
 
     this.transform = mult(translate(delta), this.transform);
 }
-
-// TODO remove this once it is completely moved over to board.js
-window.onload = function()
-{
-    var shaders, i;
-
-    initGL(); // basic WebGL setup for the scene 
-
-    // load and compile our shaders into a program object
-    var shaders = initShaders( gl, "vertex-shader", "fragment-shader" );
-
-    //use small move val
-    var t0 = new Tile(shaders);
-    // t0.move(.5);
-    var t1 = new Tile(shaders);
-    t1.move(Tile.DEFAULT_HEIGHT + Tile.BORDER_SIZE, Y_AXIS);
-    var t2 = new Tile(shaders);
-    t2.move(-(Tile.DEFAULT_HEIGHT + Tile.BORDER_SIZE), Y_AXIS);
-
-    drawables.push(t0, t1, t2);
-    renderScene();
-};
-
