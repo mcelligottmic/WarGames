@@ -70,6 +70,9 @@ window.onload = function() {
     // load and compile our shaders into a program object
     var shaders = initShaders( gl, "vertex-shader", "fragment-shader" );
     var board_01 = new Board(10, 10, shaders);
+    var box_01 = new Box(shaders, 0, 0, 0);
     drawables.push(board_01);
+    drawables.push(box_01);
+
     renderScene();
 };

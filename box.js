@@ -64,7 +64,7 @@ Box.prototype.makeSquare = function(x, y, z, w) {
 }
 
 //TODO rotate sides according to the right axis
-Box.prototype.makeCube = function(x, y, z, w) {
+Box.prototype.makeBox = function(x, y, z, w) {
     var d = Tile.DEFAULT_DISTANCE * 0.5;
 
     this.makeSquare(x, y, z-d, w); //Back
