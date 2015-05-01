@@ -47,36 +47,27 @@ Box.prototype.numVertices = function() {return this.points.length;}
 
 //TODO expand makeSquare to makeSide(not limited to cube)
 //build two triangles and put them together
-Box.prototype.makeSquare = function(x, y, z, w) {
-    //TODO change distance to Length, Width, and Height
-    var d = Tile.DEFAULT_DISTANCE * 0.5;
+Box.prototype.makeSide = function(a, b, c, d) {
 
-    //vertices going counterclockwise starting with the top left point
-    var vertices = [
-        vec4( x - d, y + d , z, w),      //TL
-        vec4( x - d, y - d, z , w),      //BL
-        vec4( x + d, y - d, z, w),       //BR
-        vec4( x + d, y + d, z, w),       //TR
-    ];
-
-    this.points.push( vertices[0], vertices[1], vertices[2], vertices[0],
-                  vertices[2], vertices[3]);
+    this.points.push( a, b, c, c, d, a);
 }
 
 //TODO rotate sides according to the right axis
-Box.prototype.makeBox = function(x, y, z, w) {
-    var d = Tile.DEFAULT_DISTANCE * 0.5;
+Box.prototype.makeBox = function(x, y, z) {
+    var d = Box.DEFAULT_DISTANCE * 0.5;
 
-    this.makeSquare(x, y, z-d, w); //Back
-    this.makeSquare(x, y, z+d, w); //Front
-    //rotate
-    this.makeSquare(x-d, y, z, w); //Left
-    //rotate
-    this.makeSquare(x+d, y, z, w); //Right
-    //rotate
-    this.makeSquare(x, y+d, z, w); //Top
-    //rotate
-    this.makeSquare(x, y-d, z, w); //Bot
+    var vertices = [
+        vec4( x - d, y + d , z + d, 1),      //FTL
+        vec4( x - d, y - d, z + d, 1),      //FBL
+        vec4( x + d, y - d, z + d, 1),       //FBR
+        vec4( x + d, y + d, z + d, 1),       //FTR
+        vec4( x - d, y + d , z - d, 1),      //BTL
+        vec4( x - d, y - d, z - d, 1),      //BBL
+        vec4( x + d, y - d, z - d, 1),       //BBR
+        vec4( x + d, y + d, z - d, 1),       //BTR
+    ];
+
+    this.makeSide(vertices[0], vertices[4], vertices[5], vertices[1]); //Left
 }
 
 /* Translate this cube along the specified canonical axis. */
