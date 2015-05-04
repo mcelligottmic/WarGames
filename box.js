@@ -4,7 +4,7 @@
   points array. Make sure to render a triangle fan instead of separate triangles.
   See https://www.opengl.org/sdk/docs/man/ for info about specific OpenGL funcs.
  */
-
+// TODO 5/3 Constructor should also take in a color for this box
 var Box = function (program, x, y, z) {
     this.points = [];
 
@@ -22,8 +22,9 @@ var Box = function (program, x, y, z) {
 }
 
 //distance between two points
-Tile.DEFAULT_DISTANCE = 0.5;
+Box.DEFAULT_DISTANCE = 0.5;
 
+// TODO 5/3 color should be passed into the corresponding shader program uniform variable
 Box.prototype.draw = function() {
     gl.useProgram(this.program);
 
@@ -49,7 +50,7 @@ Box.prototype.numVertices = function() {return this.points.length;}
 //build two triangles and put them together
 Box.prototype.makeSide = function(a, b, c, d) {
 
-    this.points.push( a, b, c, c, d, a);
+    this.points.push(a, b, c, c, d, a);
 }
 
 //TODO rotate sides according to the right axis
@@ -68,6 +69,7 @@ Box.prototype.makeBox = function(x, y, z) {
     ];
 
     this.makeSide(vertices[0], vertices[4], vertices[5], vertices[1]); //Left
+    this.makeSide(vertices[0], vertices[1], vertices[2], vertices[3]); //Front
 }
 
 /* Translate this cube along the specified canonical axis. */
@@ -89,3 +91,4 @@ Box.prototype.turnSquare = function(angle, axis){
 
     this.transform = mult(this.transform, rotate(angle, avec));
 }
+

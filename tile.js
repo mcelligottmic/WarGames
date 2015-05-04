@@ -4,7 +4,7 @@
   points array. Make sure to render a triangle fan instead of separate triangles.
   See https://www.opengl.org/sdk/docs/man/ for info about specific OpenGL funcs.
  */
-// TODO modify constructor to take in center coords for this tile
+// TODO 5/3 Constructor should take in a color for this tile
 var Tile = function (program, x, y) {
     this.points = [];
 
@@ -28,6 +28,7 @@ Tile.DEFAULT_HEIGHT = Math.sqrt(3) / 2;
 // spacing between adjacent tiles
 Tile.BORDER_SIZE = Tile.DEFAULT_HEIGHT * 0.05;
 
+// TODO 5/3 This tile's color should be passed via the corresponding shader program uniform variable
 Tile.prototype.draw = function() {
     gl.useProgram(this.program);
 
@@ -77,3 +78,4 @@ Tile.prototype.move = function(dist, axis) {
 
     this.transform = mult(translate(delta), this.transform);
 }
+
