@@ -6,8 +6,9 @@
  */
  
 // TODO 5/3 Constructor should take in a color for this tile
-var Tile = function (program, x, y) {
+var Tile = function (program, x, y, color) {
     this.points = [];
+    this.color = color;
 
     this.transform = mat4(); // initialize object transform as identity matrix
 
@@ -38,6 +39,9 @@ Tile.prototype.draw = function() {
 
     var xformId = gl.getUniformLocation(this.program, "modeltransform");
     gl.uniformMatrix4fv(xformId, false, flatten(this.transform));
+
+    var colorId = gl.getUniformLocation(this.program, "color"); 
+    gl.uniform4fv(colorId, flatten(this.color));
 
     gl.bindBuffer( gl.ARRAY_BUFFER, this.vBufferId ); // set active array buffer
     // map buffer data to the vertex shader attribute

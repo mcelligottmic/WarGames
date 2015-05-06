@@ -26,13 +26,13 @@ main()
 <script id="fragment-shader" type="x-shader/x-fragment">
 precision mediump float;
 
-// TODO 5/3 Add a uniform variable for color
+// uniform variable for color
+uniform vec4 color;
 
 void
 main()
 {
-    // TODO 5/3 change this to use the color uniform variable instead of being hard-coded
-    gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );
+    gl_FragColor = color;
 }
 </script>
 

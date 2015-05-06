@@ -2,8 +2,9 @@
     Creates a borad made of hexagonal tiles
     arranged in a parallelogram.
 */
+
 // TODO 5/3 Constructor should take in a default color for the tiles
-var Board = function (rows, cols, shaders) {
+var Board = function (rows, cols, shaders, color) {
     this.rows = rows;
     this.cols = cols;
 
@@ -37,7 +38,7 @@ var Board = function (rows, cols, shaders) {
             }
             // build a new tile at the desired coords
             // TODO 5/3 Pass in the color for this tile
-            var t0 = new Tile(shaders, x, y);
+            var t0 = new Tile(shaders, x, y, color);
             // add this new tile to the board
             this.tiles[m].push(t0);
         }
@@ -58,17 +59,20 @@ Board.prototype.draw = function() {
 // create a new instance of Board and draw it
 window.onload = function() {
     var shaders, i; 
-    var color =
+    var color =  vec4( 1.0, 0.0, 0.0, 1.0 );
 
     initGL(); // basic WebGL setup for the scene 
 
     // load and compile our shaders into a program object
     var shaders = initShaders( gl, "vertex-shader", "fragment-shader" );
-    var board_01 = new Board(10, 10, shaders);
-    var box_01 = new Box(shaders, 0, 0, 0); // TODO 5/3 set the color of the box
+    var board_01 = new Board(10, 10, shaders, color);
+
+    var color =  vec4( 0.0, 1.0, 0.0, 1.0 );
+    var box_01 = new Box(shaders, 0, 0, 0, color); // TODO 5/3 set the color of the box
+    box_01.move(-0.5, Z_AXIS);
+    
     drawables.push(board_01);
     drawables.push(box_01);
 
     renderScene();
 }
-

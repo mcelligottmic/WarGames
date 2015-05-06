@@ -5,10 +5,9 @@
   See https://www.opengl.org/sdk/docs/man/ for info about specific OpenGL funcs.
  */
 
-// TODO 5/3 Constructor should also take in a color for this box
 var Box = function (program, x, y, z, color) {
     this.points = [];
-    this.colors = [];
+    this.color = color;
 
     this.transform = mat4(); // initialize object transform as identity matrix
 
@@ -26,7 +25,6 @@ var Box = function (program, x, y, z, color) {
 //distance between two points
 Box.DEFAULT_DISTANCE = 0.5;
 
-// TODO 5/3 color should be passed into the corresponding shader program uniform variable
 Box.prototype.draw = function() {
     gl.useProgram(this.program);
 
@@ -35,6 +33,9 @@ Box.prototype.draw = function() {
 
     var xformId = gl.getUniformLocation(this.program, "modeltransform");
     gl.uniformMatrix4fv(xformId, false, flatten(this.transform));
+
+    var colorId = gl.getUniformLocation(this.program, "color"); 
+    gl.uniform4fv(colorId, flatten(this.color));
 
     gl.bindBuffer( gl.ARRAY_BUFFER, this.vBufferId ); // set active array buffer
     // map buffer data to the vertex shader attribute
@@ -53,6 +54,10 @@ Box.prototype.makeSide = function(a, b, c, d) {
     this.points.push(a, b, c, c, d, a);
 }
 
+//TODO create method makeQuad
+//creates a quadrilateral given the center point, x_dist, y_dist, and z_dist
+
+//TODO change to makeCube
 Box.prototype.makeBox = function(x, y, z) {
     var d = Box.DEFAULT_DISTANCE * 0.5;
 
