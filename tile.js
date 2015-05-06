@@ -4,6 +4,7 @@
   points array. Make sure to render a triangle fan instead of separate triangles.
   See https://www.opengl.org/sdk/docs/man/ for info about specific OpenGL funcs.
  */
+ 
 // TODO 5/3 Constructor should take in a color for this tile
 var Tile = function (program, x, y) {
     this.points = [];
