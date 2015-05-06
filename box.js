@@ -4,13 +4,15 @@
   points array. Make sure to render a triangle fan instead of separate triangles.
   See https://www.opengl.org/sdk/docs/man/ for info about specific OpenGL funcs.
  */
+
 // TODO 5/3 Constructor should also take in a color for this box
-var Box = function (program, x, y, z) {
+var Box = function (program, x, y, z, color) {
     this.points = [];
+    this.colors = [];
 
     this.transform = mat4(); // initialize object transform as identity matrix
 
-    this.makeBox(x, y, z, 1);
+    this.makeBox(x, y, z);
 
     this.program = program;
 
@@ -45,15 +47,12 @@ Box.prototype.draw = function() {
 
 Box.prototype.numVertices = function() {return this.points.length;}
 
-
-//TODO expand makeSquare to makeSide(not limited to cube)
-//build two triangles and put them together
+//build two triangles and put them together to make a quadrilateral
 Box.prototype.makeSide = function(a, b, c, d) {
 
     this.points.push(a, b, c, c, d, a);
 }
 
-//TODO rotate sides according to the right axis
 Box.prototype.makeBox = function(x, y, z) {
     var d = Box.DEFAULT_DISTANCE * 0.5;
 
@@ -69,7 +68,15 @@ Box.prototype.makeBox = function(x, y, z) {
     ];
 
     this.makeSide(vertices[0], vertices[4], vertices[5], vertices[1]); //Left
+    //looks like bottom
     this.makeSide(vertices[0], vertices[1], vertices[2], vertices[3]); //Front
+    this.makeSide(vertices[3], vertices[7], vertices[6], vertices[2]); //Right
+    //looks like top
+    this.makeSide(vertices[7], vertices[6], vertices[5], vertices[4]); //Back
+    //looks like back
+    this.makeSide(vertices[7], vertices[4], vertices[0], vertices[3]); //Top
+    //looks like front
+    this.makeSide(vertices[1], vertices[5], vertices[6], vertices[2]); //Bottom
 }
 
 /* Translate this cube along the specified canonical axis. */
