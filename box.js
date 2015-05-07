@@ -5,13 +5,13 @@
   See https://www.opengl.org/sdk/docs/man/ for info about specific OpenGL funcs.
  */
 
-var Box = function (program, x, y, z, color) {
+var Box = function (program, x, y, z, distX, distY, distZ,color) {
     this.points = [];
     this.color = color;
 
     this.transform = mat4(); // initialize object transform as identity matrix
 
-    this.makeBox(x, y, z);
+    this.makeBox(x, y, z, distX, distY, distZ);
 
     this.program = program;
 
@@ -48,28 +48,27 @@ Box.prototype.draw = function() {
 
 Box.prototype.numVertices = function() {return this.points.length;}
 
-//build two triangles and put them together to make a quadrilateral
+//build two triangles and put them together to make a rectangle
 Box.prototype.makeSide = function(a, b, c, d) {
 
     this.points.push(a, b, c, c, d, a);
 }
 
-//TODO create method makeQuad
-//creates a quadrilateral given the center point, x_dist, y_dist, and z_dist
-
-//TODO change to makeCube
-Box.prototype.makeBox = function(x, y, z) {
-    var d = Box.DEFAULT_DISTANCE * 0.5;
+//creates a rectangle given the center point, x distance, y distance, and z distance
+Box.prototype.makeBox = function(x, y, z, distX, distY, distZ) {
+    distX = distX * 0.5;
+    distY = distY * 0.5;
+    distZ = distZ * 0.5;
 
     var vertices = [
-        vec4( x - d, y + d , z + d, 1),      //FTL
-        vec4( x - d, y - d, z + d, 1),      //FBL
-        vec4( x + d, y - d, z + d, 1),       //FBR
-        vec4( x + d, y + d, z + d, 1),       //FTR
-        vec4( x - d, y + d , z - d, 1),      //BTL
-        vec4( x - d, y - d, z - d, 1),      //BBL
-        vec4( x + d, y - d, z - d, 1),       //BBR
-        vec4( x + d, y + d, z - d, 1),       //BTR
+        vec4( x - distX, y + distY , z + distZ, 1),      //FTL
+        vec4( x - distX, y - distY, z + distZ, 1),      //FBL
+        vec4( x + distX, y - distY, z + distZ, 1),       //FBR
+        vec4( x + distX, y + distY, z + distZ, 1),       //FTR
+        vec4( x - distX, y + distY , z - distZ, 1),      //BTL
+        vec4( x - distX, y - distY, z - distZ, 1),      //BBL
+        vec4( x + distX, y - distY, z - distZ, 1),       //BBR
+        vec4( x + distX, y + distY, z - distZ, 1),       //BTR
     ];
 
     this.makeSide(vertices[0], vertices[4], vertices[5], vertices[1]); //Left

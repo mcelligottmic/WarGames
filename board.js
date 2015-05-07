@@ -68,7 +68,7 @@ window.onload = function() {
     var board_01 = new Board(10, 10, shaders, color);
 
     var color =  vec4( 0.0, 1.0, 0.0, 1.0 );
-    var box_01 = new Box(shaders, 0, 0, 0, color); // TODO 5/3 set the color of the box
+    var box_01 = new Box(shaders, 0, 0, 0, 0.5, 0.5, 0.5, color);
     box_01.move(-0.5, Z_AXIS);
     
     drawables.push(board_01);
