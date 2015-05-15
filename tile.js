@@ -5,7 +5,6 @@
   See https://www.opengl.org/sdk/docs/man/ for info about specific OpenGL funcs.
  */
  
-// TODO 5/3 Constructor should take in a color for this tile
 var Tile = function (program, x, y, color) {
     this.points = [];
     this.color = color;
@@ -30,7 +29,6 @@ Tile.DEFAULT_HEIGHT = Math.sqrt(3) / 2;
 // spacing between adjacent tiles
 Tile.BORDER_SIZE = Tile.DEFAULT_HEIGHT * 0.05;
 
-// TODO 5/3 This tile's color should be passed via the corresponding shader program uniform variable
 Tile.prototype.draw = function() {
     gl.useProgram(this.program);
 
@@ -83,4 +81,3 @@ Tile.prototype.move = function(dist, axis) {
 
     this.transform = mult(translate(delta), this.transform);
 }
-

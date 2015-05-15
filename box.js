@@ -9,7 +9,7 @@ var Box = function (program, x, y, z, distX, distY, distZ,color) {
     this.points = [];
     this.color = color;
 
-    this.transform = mat4(); // initialize object transform as identity matrix
+    this.transform = mat4(); // Step #1 initialize object transform as identity matrix
 
     this.makeBox(x, y, z, distX, distY, distZ);
 
@@ -31,6 +31,7 @@ Box.prototype.draw = function() {
     var projId = gl.getUniformLocation(this.program, "projection"); 
     gl.uniformMatrix4fv(projId, false, flatten(projection));
 
+    // Step #3 - pass this object's transform matrix to the shader program
     var xformId = gl.getUniformLocation(this.program, "modeltransform");
     gl.uniformMatrix4fv(xformId, false, flatten(this.transform));
 
@@ -92,14 +93,3 @@ Box.prototype.move = function(dist, axis) {
 
     this.transform = mult(translate(delta), this.transform);
 }
-
-/* Rotate this side around the specified canonical axis. */
-Box.prototype.turnSquare = function(angle, axis){
-    var avec = [0, 0, 0];
-
-    if (axis === undefined) axis = Y_AXIS;
-    avec[axis] = 1;
-
-    this.transform = mult(this.transform, rotate(angle, avec));
-}
-

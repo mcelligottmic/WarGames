@@ -11,7 +11,7 @@ attribute vec4 vPosition; //vertex attributes
 
 //uniform means same for all vectices
 uniform mat4 projection;
-uniform mat4 modeltransform;
+uniform mat4 modeltransform; // Step #2a per-object transform passed from the app
 
 void
 main()
@@ -19,7 +19,8 @@ main()
 	//math is done as such (projection*(modeltransform*vPosition));
 	//adding projection does not display hex, also cannot display other two hexagons
 	// gl_Position = modeltransform * vPosition;
-    gl_Position = projection * modeltransform * vPosition;
+    gl_Position = projection * modeltransform * vPosition; // Step #2b
+    // gl_Position = projection * camera * modeltransform * vPosition; // Step #2b
 }
 </script>
 
@@ -43,12 +44,16 @@ main()
 <script type="text/javascript" src="tile.js"></script>
 <script type="text/javascript" src="board.js"></script>
 <script type="text/javascript" src="box.js"></script>
+<script type="text/javascript" src="tank.js"></script>
 </head>
 
 <body>
 <canvas id="gl-canvas" width="1280" height="720">
-Oops ... your browser doesn't support the HTML5 canvas element
+	Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
+<div>
+        <button id="Btn_TL">Move Left </button>
+        <button id="Btn_TR">Move Right</button>
+    </div>
 </body>
 </html>
-

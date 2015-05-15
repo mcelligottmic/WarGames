@@ -3,7 +3,12 @@
     arranged in a parallelogram.
 */
 
-// TODO 5/3 Constructor should take in a default color for the tiles
+// a few simple constants
+const X_AXIS = 0;
+const Y_AXIS = 1;
+const Z_AXIS = 2;
+const move_dist = Tile.BORDER_SIZE + Tile.DEFAULT_HEIGHT;
+
 var Board = function (rows, cols, shaders, color) {
     this.rows = rows;
     this.cols = cols;
@@ -53,7 +58,6 @@ Board.prototype.draw = function() {
             this.tiles[m][n].draw();
         }
     }
-
 }
 
 // create a new instance of Board and draw it
@@ -65,14 +69,18 @@ window.onload = function() {
 
     // load and compile our shaders into a program object
     var shaders = initShaders( gl, "vertex-shader", "fragment-shader" );
+    
     var board_01 = new Board(10, 10, shaders, color);
 
-    var color =  vec4( 0.0, 1.0, 0.0, 1.0 );
-    var box_01 = new Box(shaders, 0, 0, 0, 0.5, 0.5, 0.5, color);
-    box_01.move(-0.5, Z_AXIS);
+    //var color =  vec4( 0.0, 1.0, 0.0, 1.0 );
+    var tank_01 = new Tank(shaders, 0, 0, 1);
+    tank_01.move(move_dist, X_AXIS);
+    // var box_01 = new Box(shaders, 0, 0, 0, 0.8, 0.4, 0.2, color);
+    // box_01.move(-0.5, Z_AXIS);
     
     drawables.push(board_01);
-    drawables.push(box_01);
+    drawables.push(tank_01);
+    // drawables.push(box_01);
 
     renderScene();
 }

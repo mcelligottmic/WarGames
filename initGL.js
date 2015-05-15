@@ -5,14 +5,8 @@
 var canvas; // global to hold reference to an HTML5 canvas
 var gl; // global to hold reference to our WebGL context
 
-// a few simple constants
-const X_AXIS = 0;
-const Y_AXIS = 1;
-const Z_AXIS = 2;
-
-var currAngle = 0;
-
 var projection;
+var currDistance = 0;
 
 var drawables = []; // used to store any objects that need to be drawn
 
@@ -41,12 +35,33 @@ function initGL()
     projection = mult(projection, translate(-5, -3, 0));
     projection = mult(projection, rotate(80, 1, 0, 0));
     projection = mult(projection, rotate(30, 0, 0, 1));
+
+    // set up an event handler for this button
+    var a = document.getElementById("Btn_TR");
+    a.addEventListener("click",
+        function(){
+            /* TODO - This button should start 90deg
+                rotation (to the right) of the top cube. */
+            if (currDistance === 0) {
+                currDistance = 1;
+                // currDistance = 2;
+            }
+        },
+        false
+    );
+
  }
 
 /* Global render callback - would draw multiple objects if there were more than one */
 var renderScene = function(){
     // start from a clean frame buffer for this frame
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    if (currDistance != 0) {
+                currDistance -= 10/60;
+                drawables[1].move( 1/60);
+    }
+    
 
     // loop over all objects and draw each
     var i;
