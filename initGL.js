@@ -53,7 +53,7 @@ var renderScene = function(){
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // TODO loop over all objects and update each
-    drawables[1].update;  
+    drawables[1].update();  
 
     // loop over all objects and draw each
     var i;
