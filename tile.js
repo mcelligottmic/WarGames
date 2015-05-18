@@ -7,8 +7,10 @@
  
 var Tile = function (program, x, y, color) {
     this.points = [];
+    
+    this.coordinates = [x, y];
     this.color = color;
-
+    
     this.transform = mat4(); // initialize object transform as identity matrix
 
     this.makeTile(x, y, 0, 1);
@@ -52,6 +54,8 @@ Tile.prototype.draw = function() {
 
 Tile.prototype.numVertices = function() {return this.points.length;}
 
+Tile.prototype.getCoordinates = function() {return this.coordinates;}
+
 Tile.prototype.makeTile = function(x, y, z, w) {
     //distance between points, or the length of each side of the hexagon
     var d = Tile.DEFAULT_DISTANCE;
@@ -72,12 +76,12 @@ Tile.prototype.makeTile = function(x, y, z, w) {
                   vertices[4], vertices[5], vertices[6] , vertices[1]);
 }
 
-/* Translate this cube along the specified canonical axis. */
-Tile.prototype.move = function(dist, axis) {
-    var delta = [0, 0, 0];
+/* Tiles should never move so this probably can be removed*/
+// Tile.prototype.move = function(dist, axis) {
+//     var delta = [0, 0, 0];
 
-    if (axis === undefined) axis = X_AXIS;
-    delta[axis] = dist;
+//     if (axis === undefined) axis = X_AXIS;
+//     delta[axis] = dist;
 
-    this.transform = mult(translate(delta), this.transform);
-}
+//     this.transform = mult(translate(delta), this.transform);
+// }

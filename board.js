@@ -7,7 +7,6 @@
 const X_AXIS = 0;
 const Y_AXIS = 1;
 const Z_AXIS = 2;
-const move_dist = Tile.BORDER_SIZE + Tile.DEFAULT_HEIGHT;
 
 var Board = function (rows, cols, shaders, color) {
     this.rows = rows;
@@ -42,12 +41,16 @@ var Board = function (rows, cols, shaders, color) {
                 y = y - (Tile.DEFAULT_HEIGHT + Tile.BORDER_SIZE) * 0.5;
             }
             // build a new tile at the desired coords
-            // TODO 5/3 Pass in the color for this tile
             var t0 = new Tile(shaders, x, y, color);
             // add this new tile to the board
             this.tiles[m].push(t0);
         }
     }
+}
+
+/* Given m (row) and n (column) */
+Board.prototype.getTileCoordinates = function (m, n) {
+    return this.tiles[m][n].getCoordinates();
 }
 
 // looping over all Tiles and drawing each
@@ -71,10 +74,12 @@ window.onload = function() {
     var shaders = initShaders( gl, "vertex-shader", "fragment-shader" );
     
     var board_01 = new Board(10, 10, shaders, color);
-
+    //console.log(board_01.getTileCoordinates(1, 0) );
+    
     //var color =  vec4( 0.0, 1.0, 0.0, 1.0 );
-    var tank_01 = new Tank(shaders, 0, 0, 1);
-    tank_01.move(move_dist, X_AXIS);
+    var tank_01 = new Tank(shaders, board_01.getTileCoordinates(0, 0) , 1);
+    tank_01.move(1, X_AXIS);
+
     // var box_01 = new Box(shaders, 0, 0, 0, 0.8, 0.4, 0.2, color);
     // box_01.move(-0.5, Z_AXIS);
     

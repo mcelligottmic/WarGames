@@ -84,6 +84,7 @@ Box.prototype.makeBox = function(x, y, z, distX, distY, distZ) {
     this.makeSide(vertices[1], vertices[5], vertices[6], vertices[2]); //Bottom
 }
 
+// TODO take in delta instead of dist and axis
 /* Translate this cube along the specified canonical axis. */
 Box.prototype.move = function(dist, axis) {
     var delta = [0, 0, 0];
