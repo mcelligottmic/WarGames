@@ -40,7 +40,7 @@ function initGL()
     a.addEventListener("click",
         function() {
             //Tank probably has to keep track what tile it is on
-            drawables[1].endPos = drawables[0].getTileCoordinates(0, 4);
+            drawables[1].endPos = drawables[0].getTileCoordinates(0, 3);
         },
         false
     );
@@ -53,7 +53,7 @@ var renderScene = function(){
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // TODO loop over all objects and update each
-    drawables[1].update();  
+    drawables[1].update();
 
     // loop over all objects and draw each
     var i;

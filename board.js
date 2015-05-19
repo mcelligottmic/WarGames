@@ -77,8 +77,8 @@ window.onload = function() {
     //console.log(board_01.getTileCoordinates(1, 0) );
     
     //var color =  vec4( 0.0, 1.0, 0.0, 1.0 );
-    var tank_01 = new Tank(shaders, board_01.getTileCoordinates(0, 0) , 1);
-    tank_01.move(1, X_AXIS);
+    var tank_01 = new Tank(shaders, board_01, [0,0], 1);
+    //tank_01.move(1, X_AXIS);
 
     // var box_01 = new Box(shaders, 0, 0, 0, 0.8, 0.4, 0.2, color);
     // box_01.move(-0.5, Z_AXIS);

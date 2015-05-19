@@ -3,13 +3,19 @@
     arranged in a parallelogram.
 */
 
-var Tank = function (shaders, coordinates, z) {
+var Tank = function (shaders, board, tileNum, z) {
 
+    var coordinates = board.getTileCoordinates(tileNum[0], tileNum[1]);
+    var color =  vec4( 0.0, 0.0, 1.0, 1.0 );
+
+    this.board = board;
+    this.tileNum = tileNum;
+
+    //do I need a deep level copy?
     this.startPos = coordinates;
     this.currPos = coordinates;
     this.endPos = coordinates;
 
-    var color =  vec4( 0.0, 0.0, 1.0, 1.0 );
     //create three boxes
     this.base = new Box(shaders, coordinates[0], coordinates[1], -0.3, 
         0.8, 0.4, 0.3, color);
