@@ -7,7 +7,10 @@ var gl; // global to hold reference to our WebGL context
 
 var projection;
 
+// TODO board and units array
+// TODO units for red and blue player
 var drawables = []; // used to store any objects that need to be drawn
+var currUnit = 1;
 
 /* Initialize global WebGL stuff - not object specific */
 function initGL()
@@ -35,15 +38,46 @@ function initGL()
     projection = mult(projection, rotate(80, 1, 0, 0));
     projection = mult(projection, rotate(30, 0, 0, 1));
 
-    // set up an event handler for this button
-    var a = document.getElementById("Btn_TR");
-    a.addEventListener("click",
-        function() {
-            //Tank probably has to keep track what tile it is on
-            drawables[1].endPos = drawables[0].getTileCoordinates(0, 3);
-        },
-        false
-    );
+    window.addEventListener("keyup", 
+        function(event) {
+            //listen for key input
+            console.log(event.keyCode);
+            switch (event.keyCode) {
+                //Left Arrow
+                case 37 :
+                    drawables[currUnit].set(drawables[currUnit].get()[0], drawables[currUnit].get()[1]-1);
+                    break;
+                //Right Arrow
+                case 39 :
+                    drawables[currUnit].set(drawables[currUnit].get()[0], drawables[currUnit].get()[1]+1);
+                    break;
+                //Up Arrow
+                case 38 :
+                    drawables[currUnit].set(drawables[currUnit].get()[0]-1, drawables[currUnit].get()[1]);
+                    break;
+                //Down Arrow
+                case 40 :
+                    drawables[currUnit].set(drawables[currUnit].get()[0]+1, drawables[currUnit].get()[1]);
+                    break;
+                //1
+                case 49 :
+                    currUnit = 1;
+                    break;
+                //2
+                case 50 :
+                    currUnit = 2;
+                    break;
+                //3
+                case 51 :
+                    currUnit = 3;
+                    break;
+                default:
+                    //do nothing
+                    break;
+            }
+            console.log("Unit: "+currUnit);
+        }
+    )
 
  }
 
@@ -52,8 +86,11 @@ var renderScene = function(){
     // start from a clean frame buffer for this frame
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    // TODO loop over all objects and update each
-    drawables[1].update();
+    // loop over all objects and update each
+    var j;
+    for (j in drawables) {
+        drawables[j].update();
+    }
 
     // loop over all objects and draw each
     var i;

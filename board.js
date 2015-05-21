@@ -63,6 +63,11 @@ Board.prototype.draw = function() {
     }
 }
 
+// Does nothing right now
+Board.prototype.update = function() { 
+    return;               
+}
+
 // create a new instance of Board and draw it
 window.onload = function() {
     var shaders, i; 
@@ -74,18 +79,22 @@ window.onload = function() {
     var shaders = initShaders( gl, "vertex-shader", "fragment-shader" );
     
     var board_01 = new Board(10, 10, shaders, color);
-    //console.log(board_01.getTileCoordinates(1, 0) );
-    
-    //var color =  vec4( 0.0, 1.0, 0.0, 1.0 );
-    var tank_01 = new Tank(shaders, board_01, [0,0], 1);
-    //tank_01.move(1, X_AXIS);
 
     // var box_01 = new Box(shaders, 0, 0, 0, 0.8, 0.4, 0.2, color);
     // box_01.move(-0.5, Z_AXIS);
+
+    // TODO add city (fixed)
+
+    // TODO add another unit (foot soldier)
+    var soldier_01 = new Soldier(shaders, board_01, [0,2]);
+    
+    var tank_01 = new Tank(shaders, board_01, [0,0]);
+    var tank_02 = new Tank(shaders, board_01, [1,0]);
     
     drawables.push(board_01);
     drawables.push(tank_01);
-    // drawables.push(box_01);
+    drawables.push(tank_02);
+    drawables.push(soldier_01);
 
     renderScene();
 }

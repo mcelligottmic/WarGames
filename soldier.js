@@ -1,8 +1,8 @@
 /*
-    Creates a Tank unit that is made up of boxes
+    Creates a Soldier unit that is made up of boxes
 */
 
-var Tank = function (shaders, board, tileNum) {
+var Soldier = function (shaders, board, tileNum) {
 
     var coordinates = board.getTileCoordinates(tileNum[0], tileNum[1]);
     var color =  vec4( 0.0, 0.0, 1.0, 1.0 );
@@ -15,49 +15,63 @@ var Tank = function (shaders, board, tileNum) {
     this.endPos = vec3(coordinates);
 
     //create three boxes
-    this.base = new Box(shaders, coordinates[0], coordinates[1], -0.3, 
-        0.8, 0.4, 0.3, color);
+    this.torso = new Box(shaders, coordinates[0], coordinates[1], -0.6, 
+        0.3, 0.3, 0.4, color);
 
     color =  vec4( 0.0, 1.0, 0.0, 1.0 );
-    this.turret = new Box(shaders, coordinates[0], coordinates[1], -0.3 + -0.3,
+    this.head = new Box(shaders, coordinates[0], coordinates[1], -0.6 + -0.4,
          0.3, 0.3, 0.3, color);
 
     color =  vec4( 0.5, 0.5, 0.5, 1.0 );
-    this.barrel = new Box(shaders, coordinates[0]+0.3, coordinates[1], -0.3 + -0.3 + -0.1,
-         0.4, 0.2, 0.1, color);
+    this.armL = new Box(shaders, coordinates[0]-0.4, coordinates[1], -0.6 + -0.1,
+         0.2, 0.1, 0.1, color);
+    this.armR = new Box(shaders, coordinates[0]+0.4, coordinates[1], -0.6 + -0.1,
+         0.2, 0.1, 0.1, color);
+
+    color =  vec4( 0.5, 0.5, 0.5, 1.0 );
+    this.legL = new Box(shaders, coordinates[0]-0.1, coordinates[1], -0.6 + 0.35,
+         0.1, 0.1, 0.2, color);
+    this.legR = new Box(shaders, coordinates[0]+0.1, coordinates[1], -0.6 + 0.35,
+         0.1, 0.1, 0.2, color);
 }
 
-Tank.prototype.draw = function() {
+Soldier.prototype.draw = function() {
     // call each box and draw it
-    this.base.draw();
-    this.turret.draw();
-    this.barrel.draw();
+    this.torso.draw();
+    this.head.draw();
+    this.armL.draw();
+    this.armR.draw();
+    this.legL.draw();
+    this.legR.draw();
 }
 
 /* Moves all three boxes at once */
-Tank.prototype.move = function(dist, axis) {
+Soldier.prototype.move = function(dist, axis) {
 
     // if currPos is only x,y and axis is z does currPos[2] now hold z?
 
     // TODO Check for invalid board movement
-    // Tank.set checks it as of now
+    // Soldier.set checks it as of now
 
     
     //update position
     this.currPos[axis] += dist;
 
-    this.base.move(dist, axis);
-    this.turret.move(dist, axis);
-    this.barrel.move(dist, axis);
+    this.torso.move(dist, axis);
+    this.head.move(dist, axis);
+    this.armL.move(dist, axis);
+    this.armR.move(dist, axis);
+    this.legL.move(dist, axis);
+    this.legR.move(dist, axis);
 }
 
 //get tile 
-Tank.prototype.get = function() {
+Soldier.prototype.get = function() {
     return this.tileNum;
 }
 
 //set tile
-Tank.prototype.set = function(row, col) {
+Soldier.prototype.set = function(row, col) {
     // check movement for off board
     if ( (row >= this.board.rows) || (col >= this.board.cols) ||
          (row < 0) || (col < 0)) {
@@ -70,7 +84,7 @@ Tank.prototype.set = function(row, col) {
     }
 }
 
-Tank.prototype.update = function() { 
+Soldier.prototype.update = function() { 
     var distX = 0;
     var distY = 0;
 
