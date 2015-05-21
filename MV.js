@@ -435,15 +435,15 @@ function ortho( left, right, bottom, top, near, far )
 
     var w = right - left;
     var h = top - bottom;
-    var d = far - near;
+    var d = near - far;
 
     var result = mat4();
     result[0][0] = 2.0 / w;
     result[1][1] = 2.0 / h;
     result[2][2] = -2.0 / d;
-    result[0][3] = -(left + right) / w;
-    result[1][3] = -(top + bottom) / h;
-    result[2][3] = -(near + far) / d;
+    result[0][3] = (left + right) / w;
+    result[1][3] = (top + bottom) / h;
+    result[2][3] = (near + far) / d;
 
     return result;
 }
@@ -453,13 +453,13 @@ function ortho( left, right, bottom, top, near, far )
 function perspective( fovy, aspect, near, far )
 {
     var f = 1.0 / Math.tan( radians(fovy) / 2 );
-    var d = far - near;
+    var d = near - far;
 
     var result = mat4();
     result[0][0] = f / aspect;
     result[1][1] = f;
-    result[2][2] = -(near + far) / d;
-    result[2][3] = -2 * near * far / d;
+    result[2][2] = (near + far) / d;
+    result[2][3] = 2 * near * far / d;
     result[3][2] = -1;
     result[3][3] = 0.0;
 

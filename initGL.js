@@ -37,7 +37,7 @@ function initGL()
     // note: added rotation just to better see the shapes of our cubes
     // TODO adjust these view boundaries to look nice
     projection = ortho( -5*aspectRatio, 5*aspectRatio,
-                        -7.5, 2.5, -10, 10);
+                        -2.5, 7.5, -10, 10);
     projection = mult(projection, translate(-5, -3, 0));
     projection = mult(projection, rotate(80, 1, 0, 0));
     projection = mult(projection, rotate(30, 0, 0, 1));
