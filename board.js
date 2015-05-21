@@ -80,18 +80,15 @@ window.onload = function() {
     
     var board_01 = new Board(10, 10, shaders, color);
 
-    // var box_01 = new Box(shaders, 0, 0, 0, 0.8, 0.4, 0.2, color);
-    // box_01.move(-0.5, Z_AXIS);
+    var city_01 = new City(shaders, board_01, [9, 9]);
 
-    // TODO add city (fixed)
-
-    // TODO add another unit (foot soldier)
-    var soldier_01 = new Soldier(shaders, board_01, [0,2]);
+    var soldier_01 = new Soldier(shaders, board_01, [0,5]);
     
-    var tank_01 = new Tank(shaders, board_01, [0,0]);
-    var tank_02 = new Tank(shaders, board_01, [1,0]);
+    var tank_01 = new Tank(shaders, board_01, [0,1]);
+    var tank_02 = new Tank(shaders, board_01, [0,2]);
     
-    drawables.push(board_01);
+    BOARD = board_01;
+    drawables.push(city_01);
     drawables.push(tank_01);
     drawables.push(tank_02);
     drawables.push(soldier_01);

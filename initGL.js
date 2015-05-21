@@ -2,15 +2,19 @@
     initGL.js - Essential setup for our WebGL application
 */
 
+//Global references
 var canvas; // global to hold reference to an HTML5 canvas
 var gl; // global to hold reference to our WebGL context
 
 var projection;
 
-// TODO board and units array
-// TODO units for red and blue player
+// Global to hold reference to the game board
+var BOARD;
+// TODO remove drawables and replace with blue and red player
 var drawables = []; // used to store any objects that need to be drawn
 var currUnit = 1;
+// TODO create a var to keep track of which player is moving
+// var currPlayer = 0;
 
 /* Initialize global WebGL stuff - not object specific */
 function initGL()
@@ -72,7 +76,7 @@ function initGL()
                     currUnit = 3;
                     break;
                 default:
-                    //do nothing
+                    //Not handling this key code yet
                     break;
             }
             console.log("Unit: "+currUnit);
@@ -86,17 +90,25 @@ var renderScene = function(){
     // start from a clean frame buffer for this frame
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    // Update
+        // We don't really need to update Board yet
+    // BOARD.update();
+
     // loop over all objects and update each
     var j;
     for (j in drawables) {
         drawables[j].update();
     }
 
+    // Render
+    BOARD.draw();
+
     // loop over all objects and draw each
     var i;
     for (i in drawables) {
         drawables[i].draw();
     }
+
 
     // queue up this same callback for the next frame
     requestAnimFrame(renderScene);
